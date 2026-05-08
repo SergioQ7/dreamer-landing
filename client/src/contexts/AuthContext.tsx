@@ -12,9 +12,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Simple admin credentials (stored in localStorage after login)
 // In production, you should validate these on the backend
+// Use environment variables for simple credentials instead of hardcoding them
 const ADMIN_CREDENTIALS = [
-  { email: "admin@dreamerwholesale.com", password: "dreamer2024admin!" },
-  { email: "owner@dreamerwholesale.com", password: "dreamer2024owner!" },
+  { 
+    email: import.meta.env.VITE_ADMIN_EMAIL || "admin@dreamerwholesale.com", 
+    password: import.meta.env.VITE_ADMIN_PASSWORD || "change-me-in-vercel!" 
+  },
 ];
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
