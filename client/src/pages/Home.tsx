@@ -361,10 +361,10 @@ function HeroSection({ onApply, heroImg }: { onApply: () => void; heroImg: strin
         <h2
           className="hero-animate hero-animate-2"
           style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'Anton', sans-serif",
             fontSize: "clamp(28px, 4vw, 52px)",
             fontWeight: 400,
-            fontStyle: "italic",
+            textTransform: "uppercase",
             color: "var(--dreamer-blue)",
             lineHeight: 1.2,
             marginBottom: 28,
@@ -509,7 +509,7 @@ function EssenceSection({ essenceImg }: { essenceImg: string }) {
               padding: "24px 28px",
               minWidth: 160,
             }}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, fontWeight: 700, lineHeight: 1 }}>7+</div>
+              <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 36, fontWeight: 400, lineHeight: 1 }}>7+</div>
               <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", marginTop: 6 }}>Years of Excellence</div>
             </div>
           </div>
@@ -522,9 +522,9 @@ function EssenceSection({ essenceImg }: { essenceImg: string }) {
             </div>
 
             <h2 style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Anton', sans-serif",
               fontSize: "clamp(36px, 4vw, 52px)",
-              fontWeight: 700,
+              fontWeight: 400,
               color: "white",
               lineHeight: 1.1,
               marginBottom: 12,
@@ -532,10 +532,10 @@ function EssenceSection({ essenceImg }: { essenceImg: string }) {
               Fashion Is More
             </h2>
             <h3 style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Anton', sans-serif",
               fontSize: "clamp(24px, 3vw, 36px)",
               fontWeight: 400,
-              fontStyle: "italic",
+              textTransform: "uppercase",
               color: "var(--dreamer-blue)",
               marginBottom: 36,
             }}>
@@ -571,7 +571,7 @@ function EssenceSection({ essenceImg }: { essenceImg: string }) {
                 { num: "2017", label: "Est. Colombia" },
               ].map(({ num, label }) => (
                 <div key={label}>
-                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: "white" }}>{num}</div>
+                  <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 28, fontWeight: 400, color: "white" }}>{num}</div>
                   <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 10, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(161,193,216,0.6)", marginTop: 4 }}>{label}</div>
                 </div>
               ))}
@@ -601,9 +601,9 @@ function CollectionsSection({ onApply, collections }: { onApply: () => void; col
               <span className="section-number">02 — The Wholesale Experience</span>
             </div>
             <h2 style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Anton', sans-serif",
               fontSize: "clamp(36px, 4vw, 56px)",
-              fontWeight: 700,
+              fontWeight: 400,
               color: "white",
               lineHeight: 1.1,
             }}>
@@ -672,9 +672,9 @@ function CollectionsSection({ onApply, collections }: { onApply: () => void; col
                   {col.tag}
                 </div>
                 <h3 style={{
-                  fontFamily: "'Playfair Display', serif",
+                  fontFamily: "'Anton', sans-serif",
                   fontSize: 22,
-                  fontWeight: 700,
+                  fontWeight: 400,
                   color: "white",
                   marginBottom: 6,
                 }}>
@@ -782,9 +782,9 @@ function TimelineSection() {
             <span className="section-number">03 — Our Journey</span>
           </div>
           <h2 style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'Anton', sans-serif",
             fontSize: "clamp(36px, 4vw, 56px)",
-            fontWeight: 700,
+            fontWeight: 400,
             color: "white",
             lineHeight: 1.1,
           }}>
@@ -827,9 +827,9 @@ function TimelineSection() {
               {/* Year */}
               <div>
                 <span style={{
-                  fontFamily: "'Playfair Display', serif",
+                  fontFamily: "'Anton', sans-serif",
                   fontSize: item.year === "Today" ? 18 : 28,
-                  fontWeight: 700,
+                  fontWeight: 400,
                   color: item.year === "Today" ? "var(--dreamer-blue)" : "var(--dreamer-gold)",
                   letterSpacing: item.year === "Today" ? "0.1em" : "-0.02em",
                 }}>
@@ -840,9 +840,9 @@ function TimelineSection() {
               {/* Content */}
               <div>
                 <h4 style={{
-                  fontFamily: "'Playfair Display', serif",
+                  fontFamily: "'Anton', sans-serif",
                   fontSize: 20,
-                  fontWeight: 700,
+                  fontWeight: 400,
                   color: "white",
                   marginBottom: 8,
                 }}>
@@ -961,9 +961,9 @@ function ContactSection() {
               <span className="section-number">04 — B2B Partnership</span>
             </div>
             <h2 style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Anton', sans-serif",
               fontSize: "clamp(36px, 4vw, 52px)",
-              fontWeight: 700,
+              fontWeight: 400,
               color: "white",
               lineHeight: 1.1,
               marginBottom: 12,
@@ -971,10 +971,10 @@ function ContactSection() {
               Become a
             </h2>
             <h3 style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Anton', sans-serif",
               fontSize: "clamp(24px, 3vw, 40px)",
               fontWeight: 400,
-              fontStyle: "italic",
+              textTransform: "uppercase",
               color: "var(--dreamer-blue)",
               marginBottom: 32,
             }}>
@@ -1037,7 +1037,7 @@ function ContactSection() {
                     <path d="M20 6L9 17l-5-5" />
                   </svg>
                 </div>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, color: "white", marginBottom: 12 }}>Application Received</h3>
+                <h3 style={{ fontFamily: "'Anton', sans-serif", fontSize: 28, color: "white", marginBottom: 12 }}>Application Received</h3>
                 <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>
                   Thank you for your interest in becoming a DREAMER wholesale partner. Our team will review your application and contact you within 24 business hours.
                 </p>

@@ -56,9 +56,9 @@ export default function LoginPage() {
           marginBottom: 48,
         }}>
           <h1 style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'Anton', sans-serif",
             fontSize: 32,
-            fontWeight: 700,
+            fontWeight: 400,
             color: "white",
             margin: 0,
             marginBottom: 8,
