@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
@@ -9,6 +9,14 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const [, setLocation] = useLocation();
+
+  // Restore normal cursor for login panel
+  useEffect(() => {
+    document.body.style.cursor = "auto";
+    return () => {
+      document.body.style.cursor = "none";
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -206,22 +214,6 @@ export default function LoginPage() {
               {isLoading ? "Signing In..." : "Sign In"}
             </button>
           </form>
-
-          {/* Helper Text */}
-          <div style={{
-            marginTop: 32,
-            paddingTop: 24,
-            borderTop: "1px solid rgba(161, 193, 216, 0.1)",
-            fontSize: 12,
-            color: "rgba(255, 255, 255, 0.5)",
-            fontFamily: "'Montserrat', sans-serif",
-            textAlign: "center",
-            lineHeight: 1.6,
-          }}>
-            <p style={{ margin: "0 0 8px 0" }}>Demo credentials:</p>
-            <p style={{ margin: "4px 0" }}>admin@dreamerwholesale.com</p>
-            <p style={{ margin: 0 }}>dreamer2024admin!</p>
-          </div>
         </div>
       </div>
     </div>

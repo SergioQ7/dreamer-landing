@@ -24,6 +24,14 @@ export default function AdminPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "contacted">("all");
 
+  // Restore normal cursor for admin panel
+  useEffect(() => {
+    document.body.style.cursor = "auto";
+    return () => {
+      document.body.style.cursor = "none";
+    };
+  }, []);
+
   // Redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
