@@ -190,7 +190,7 @@ function Navigation({ onApply }: { onApply: () => void }) {
       <img src={ASSETS.logo} alt="DREAMER" style={{ height: 28, filter: "brightness(0) invert(1)" }} />
 
       {/* Desktop Nav */}
-      <div style={{ display: "flex", gap: 40, alignItems: "center" }} className="hidden md:flex">
+      <div style={{ gap: 40, alignItems: "center" }} className="hidden md:flex">
         {[
           { label: "Our Essence", id: "essence" },
           { label: "Collections", id: "collections" },
@@ -214,9 +214,9 @@ function Navigation({ onApply }: { onApply: () => void }) {
         aria-label="Menu"
       >
         <div style={{ width: 24, display: "flex", flexDirection: "column", gap: 5 }}>
-          <span style={{ display: "block", height: 1, background: menuOpen ? "var(--dreamer-blue)" : "white", transition: "all 0.3s", transform: menuOpen ? "rotate(45deg) translate(4px, 4px)" : "none" }} />
-          <span style={{ display: "block", height: 1, background: menuOpen ? "var(--dreamer-blue)" : "white", transition: "all 0.3s", opacity: menuOpen ? 0 : 1 }} />
-          <span style={{ display: "block", height: 1, background: menuOpen ? "var(--dreamer-blue)" : "white", transition: "all 0.3s", transform: menuOpen ? "rotate(-45deg) translate(4px, -4px)" : "none" }} />
+          <span style={{ display: "block", height: 2, background: menuOpen ? "var(--dreamer-blue)" : "white", transition: "all 0.3s", transform: menuOpen ? "rotate(45deg) translate(5px, 5px)" : "none" }} />
+          <span style={{ display: "block", height: 2, background: menuOpen ? "var(--dreamer-blue)" : "white", transition: "all 0.3s", opacity: menuOpen ? 0 : 1 }} />
+          <span style={{ display: "block", height: 2, background: menuOpen ? "var(--dreamer-blue)" : "white", transition: "all 0.3s", transform: menuOpen ? "rotate(-45deg) translate(5px, -5px)" : "none" }} />
         </div>
       </button>
 
