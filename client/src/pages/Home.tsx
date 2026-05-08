@@ -478,13 +478,13 @@ function EssenceSection({ essenceImg }: { essenceImg: string }) {
           <div className="reveal-left" style={{ position: "relative" }}>
             <div style={{
               position: "relative",
-              height: 600,
+              height: "auto",
               overflow: "hidden",
             }}>
               <img
                 src={essenceImg}
                 alt="DREAMER Essence"
-                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+                style={{ width: "100%", height: "auto", display: "block", objectFit: "contain", objectPosition: "center top" }}
               />
               {/* Accent frame */}
               <div style={{
