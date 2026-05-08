@@ -346,13 +346,14 @@ function HeroSection({ onApply, heroImg }: { onApply: () => void; heroImg: strin
         <h1
           className="hero-animate hero-animate-2"
           style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'Anton', sans-serif",
             fontSize: "clamp(48px, 7vw, 96px)",
-            fontWeight: 700,
+            fontWeight: 400,
             color: "white",
             lineHeight: 1.0,
             marginBottom: 8,
-            letterSpacing: "-0.02em",
+            letterSpacing: "0.02em",
+            textTransform: "uppercase",
           }}
         >
           DREAMER
