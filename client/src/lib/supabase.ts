@@ -36,7 +36,7 @@ export type SiteSettings = {
 };
 
 class SupabaseWrapper {
-  private client = supabaseClient;
+  public client = supabaseClient;
 
   async addInscription(data: Omit<Inscription, 'id' | 'created_at' | 'updated_at'>) {
     const { data: result, error } = await this.client

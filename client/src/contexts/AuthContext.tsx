@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -10,60 +11,57 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Simple admin credentials (stored in localStorage after login)
-// In production, you should validate these on the backend
-// Use environment variables for simple credentials instead of hardcoding them
-const ADMIN_CREDENTIALS = [
-  { 
-    email: import.meta.env.VITE_ADMIN_EMAIL || "admin@dreamerwholesale.com", 
-    password: import.meta.env.VITE_ADMIN_PASSWORD || "change-me-in-vercel!" 
-  },
-];
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
-  // Check if user is already logged in (on component mount)
+  // Check session on mount
   useEffect(() => {
-    const savedEmail = localStorage.getItem("admin_email");
-    const sessionToken = localStorage.getItem("admin_session");
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.client.auth.getSession();
+      if (session) {
+        setIsAuthenticated(true);
+        setUserEmail(session.user.email || null);
+      }
+      setIsLoading(false);
+    };
 
-    if (savedEmail && sessionToken) {
-      setIsAuthenticated(true);
-      setUserEmail(savedEmail);
-    }
-    setIsLoading(false);
+    checkSession();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.client.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setIsAuthenticated(true);
+        setUserEmail(session.user.email || null);
+      } else {
+        setIsAuthenticated(false);
+        setUserEmail(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const login = async (email: string, password: string) => {
     setIsLoading(true);
-    // Simulate API call delay
-    await new Promise((r) => setTimeout(r, 800));
+    const { data, error } = await supabase.client.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    const validCredential = ADMIN_CREDENTIALS.find(
-      (cred) => cred.email === email && cred.password === password
-    );
-
-    if (!validCredential) {
+    if (error) {
       setIsLoading(false);
-      throw new Error("Invalid email or password");
+      throw error;
     }
 
-    // Store session
-    const sessionToken = Math.random().toString(36).substring(2);
-    localStorage.setItem("admin_email", email);
-    localStorage.setItem("admin_session", sessionToken);
-
     setIsAuthenticated(true);
-    setUserEmail(email);
+    setUserEmail(data.user.email || null);
     setIsLoading(false);
   };
 
-  const logout = () => {
-    localStorage.removeItem("admin_email");
-    localStorage.removeItem("admin_session");
+  const logout = async () => {
+    await supabase.client.auth.signOut();
     setIsAuthenticated(false);
     setUserEmail(null);
   };
