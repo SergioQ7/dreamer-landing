@@ -273,6 +273,23 @@ export default function AdminProducts() {
                 />
               </div>
               <div>
+                <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>TIPO DE PRENDA</label>
+                <select
+                  value={editingProduct?.category || ""}
+                  onChange={(e) => setEditingProduct(prev => prev ? {...prev, category: e.target.value} : null)}
+                  style={{ width: "100%", padding: "10px", background: "#071729", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }}
+                >
+                  <option value="">Selecciona una opción</option>
+                  <option value="Sets">Sets</option>
+                  <option value="Dress">Dress</option>
+                  <option value="Pants">Pants</option>
+                  <option value="Jeans">Jeans</option>
+                  <option value="Shorts">Shorts</option>
+                  <option value="Tops">Tops</option>
+                  <option value="Jumpsuits">Jumpsuits</option>
+                </select>
+              </div>
+              <div style={{ gridColumn: "1 / -1" }}>
                 <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>IMAGEN (CARGAR O URL)</label>
                 <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
                   <input
@@ -318,7 +335,9 @@ export default function AdminProducts() {
             <div key={product.id} style={{ background: "#1a1a2e", border: "1px solid rgba(161,193,216,0.15)", borderRadius: "8px", overflow: "hidden" }}>
               <img src={product.img} alt={product.code} style={{ width: "100%", height: "300px", objectFit: "cover" }} />
               <div style={{ padding: "16px" }}>
-                <h4 style={{ margin: "0 0 8px 0", fontSize: "16px", color: "#fff" }}>{product.code}</h4>
+                <h4 style={{ margin: "0 0 8px 0", fontSize: "16px", color: "#fff" }}>
+                  {product.code} {product.category && <span style={{ fontSize: "12px", color: "#A1C1D8", fontWeight: "normal", background: "rgba(161,193,216,0.1)", padding: "2px 6px", borderRadius: "4px", marginLeft: "8px" }}>{product.category}</span>}
+                </h4>
                 <p style={{ margin: "0 0 4px 0", fontSize: "14px", color: "#A1C1D8" }}>${product.price}</p>
                 <p style={{ margin: "0 0 16px 0", fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>Tallas: {product.sizes}</p>
                 

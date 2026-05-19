@@ -29,12 +29,13 @@ export type CollectionSetting = {
   tag: string;
 };
 
-export type Product = {
+export interface Product {
   id: string;
   code: string;
   price: string;
   sizes: string;
   img: string;
+  category?: string;
 };
 
 export type SiteSettings = {

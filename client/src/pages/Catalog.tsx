@@ -151,8 +151,21 @@ export default function Catalog() {
                     fontSize: "12px",
                     fontWeight: "bold",
                     letterSpacing: "1px"
-                  }}>
                     {product.code}
+                    {product.category && (
+                      <span style={{ 
+                        marginLeft: "8px", 
+                        background: "var(--dreamer-blue)", 
+                        color: "var(--dreamer-navy)",
+                        padding: "2px 6px", 
+                        borderRadius: "2px", 
+                        fontSize: "10px", 
+                        fontWeight: "bold",
+                        textTransform: "uppercase"
+                      }}>
+                        {product.category}
+                      </span>
+                    )}
                   </div>
                 </div>
                 
