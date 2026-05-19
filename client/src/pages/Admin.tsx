@@ -158,14 +158,6 @@ export default function Admin() {
     setDraftCollection(null);
   };
 
-  // Restore normal cursor for admin panel
-  useEffect(() => {
-    document.body.style.cursor = "auto";
-    return () => {
-      document.body.style.cursor = "none";
-    };
-  }, []);
-
   if (loading) {
     return (
       <div style={{ minHeight: "100vh", background: "#071729", display: "flex", alignItems: "center", justifyContent: "center", cursor: "auto" }}>

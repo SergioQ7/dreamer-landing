@@ -10,14 +10,6 @@ export default function LoginPage() {
   const { login } = useAuth();
   const [, setLocation] = useLocation();
 
-  // Restore normal cursor for login panel
-  useEffect(() => {
-    document.body.style.cursor = "auto";
-    return () => {
-      document.body.style.cursor = "none";
-    };
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);

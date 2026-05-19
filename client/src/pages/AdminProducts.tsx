@@ -127,14 +127,6 @@ export default function AdminProducts() {
     }
   }, [isAuthenticated]);
 
-  // Restore normal cursor for admin panel
-  useEffect(() => {
-    document.body.style.cursor = "auto";
-    return () => {
-      document.body.style.cursor = "none";
-    };
-  }, []);
-
   const loadSettings = async () => {
     setLoading(true);
     try {
