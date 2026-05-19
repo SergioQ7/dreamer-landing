@@ -205,6 +205,7 @@ export default function AdminPage() {
         >
           Logout
         </button>
+        </div>
       </div>
 
       {/* Main Content */}
