@@ -1,0 +1,212 @@
+import { useEffect, useState } from "react";
+import { Link } from "wouter";
+import { supabase, SiteSettings, Product } from "@/lib/supabase";
+
+const DEFAULT_PRODUCTS: Product[] = [];
+
+export default function Catalog() {
+  const [products, setProducts] = useState<Product[]>(DEFAULT_PRODUCTS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    setLoading(true);
+    try {
+      const data = await supabase.getSiteSettings();
+      if (data && data.products) {
+        setProducts(data.products);
+      }
+    } catch (error) {
+      console.error("Error loading products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#071729", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ color: "#A1C1D8", fontSize: "18px", textAlign: "center" }}>Cargando catálogo...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#071729", color: "#F5F0EB", fontFamily: "'Montserrat', sans-serif" }}>
+      {/* Header / Nav */}
+      <nav style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        background: "rgba(10, 10, 10, 0.85)",
+        backdropFilter: "blur(10px)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+        padding: "20px 0"
+      }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Link href="/">
+            <img 
+              src="https://dreamerjeans.co/cdn/shop/files/DREAMER_LOGO.png?v=1729086588&width=230" 
+              alt="DREAMER Logo" 
+              style={{ height: "30px", filter: "brightness(0) invert(1)", cursor: "pointer" }}
+            />
+          </Link>
+          <div style={{ display: "flex", gap: "20px" }}>
+            <Link href="/">
+              <span style={{ color: "#A1C1D8", textDecoration: "none", fontSize: "14px", cursor: "pointer", letterSpacing: "1px", textTransform: "uppercase" }}>Inicio</span>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section for Catalog */}
+      <section style={{ 
+        padding: "80px 24px", 
+        textAlign: "center",
+        background: "linear-gradient(to bottom, rgba(26, 26, 46, 0.8), #071729)"
+      }}>
+        <h1 style={{ 
+          fontFamily: "'Anton', sans-serif", 
+          fontSize: "clamp(40px, 8vw, 80px)", 
+          letterSpacing: "4px",
+          color: "#fff",
+          marginBottom: "16px",
+          textTransform: "uppercase"
+        }}>
+          Catálogo Oficial
+        </h1>
+        <p style={{ 
+          fontSize: "clamp(14px, 3vw, 18px)", 
+          color: "#a1c1d8", 
+          maxWidth: "600px", 
+          margin: "0 auto",
+          lineHeight: 1.6 
+        }}>
+          Descubre nuestra última colección. Diseños exclusivos y calidad premium en cada prenda.
+        </p>
+      </section>
+
+      {/* Products Grid */}
+      <section style={{ padding: "40px 24px", maxWidth: "1200px", margin: "0 auto" }}>
+        {products.length === 0 ? (
+          <div style={{ textAlign: "center", color: "#a1c1d8", padding: "60px 0", fontSize: "18px" }}>
+            No hay productos disponibles por el momento.
+          </div>
+        ) : (
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
+            gap: "32px" 
+          }}>
+            {products.map((product) => (
+              <div key={product.id} style={{ 
+                background: "#1a1a2e",
+                borderRadius: "8px",
+                overflow: "hidden",
+                border: "1px solid rgba(161,193,216,0.15)",
+                transition: "transform 0.3s, border-color 0.3s"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-5px)";
+                e.currentTarget.style.borderColor = "rgba(161,193,216,0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.borderColor = "rgba(161,193,216,0.15)";
+              }}
+              >
+                <div style={{ position: "relative", paddingTop: "133%" /* 3:4 aspect ratio */ }}>
+                  <img 
+                    src={product.img} 
+                    alt={product.code} 
+                    style={{ 
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%", 
+                      height: "100%", 
+                      objectFit: "cover" 
+                    }}
+                    onError={(e) => { (e.target as HTMLImageElement).src = "https://via.placeholder.com/400x533?text=Imagen+No+Disponible"; }}
+                  />
+                  <div style={{ 
+                    position: "absolute", 
+                    top: "12px", 
+                    left: "12px", 
+                    background: "rgba(0,0,0,0.6)", 
+                    padding: "4px 8px", 
+                    borderRadius: "4px",
+                    color: "#fff",
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                    letterSpacing: "1px"
+                  }}>
+                    {product.code}
+                  </div>
+                </div>
+                
+                <div style={{ padding: "20px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "16px" }}>
+                    <div>
+                      <h3 style={{ 
+                        margin: "0 0 4px 0", 
+                        fontSize: "12px", 
+                        color: "#a1c1d8", 
+                        textTransform: "uppercase", 
+                        letterSpacing: "1px" 
+                      }}>
+                        Precio Mayorista
+                      </h3>
+                      <span style={{ 
+                        fontSize: "24px", 
+                        fontWeight: "600", 
+                        color: "#fff" 
+                      }}>
+                        ${product.price}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "16px" }}>
+                    <h4 style={{ 
+                      margin: "0 0 8px 0", 
+                      fontSize: "12px", 
+                      color: "#a1c1d8", 
+                      textTransform: "uppercase", 
+                      letterSpacing: "1px" 
+                    }}>
+                      Tallas Disponibles
+                    </h4>
+                    <p style={{ margin: 0, fontSize: "14px", color: "#fff" }}>
+                      {product.sizes}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+      
+      {/* Footer */}
+      <footer style={{ 
+        padding: "40px 24px", 
+        textAlign: "center", 
+        borderTop: "1px solid rgba(161,193,216,0.1)",
+        marginTop: "40px"
+      }}>
+        <img 
+          src="https://dreamerjeans.co/cdn/shop/files/DREAMER_LOGO.png?v=1729086588&width=230" 
+          alt="DREAMER Logo" 
+          style={{ height: "24px", filter: "brightness(0) invert(1)", marginBottom: "16px", opacity: 0.5 }}
+        />
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>
+          © {new Date().getFullYear()} DREAMER Jeans. Todos los derechos reservados.
+        </p>
+      </footer>
+    </div>
+  );
+}

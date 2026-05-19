@@ -154,26 +154,31 @@ export default function AdminPage() {
         justifyContent: "space-between",
         alignItems: "center",
       }}>
-        <div>
+        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
           <h1 style={{
             fontFamily: "'Anton', sans-serif",
             fontSize: 32,
             fontWeight: 400,
             color: "white",
             margin: 0,
-            marginBottom: 4,
           }}>
             DREAMER Admin
           </h1>
+          <nav style={{ display: "flex", gap: "16px", marginLeft: "20px" }}>
+            <span style={{ color: "#fff", cursor: "pointer", fontSize: "13px", fontWeight: "bold", borderBottom: "1px solid #fff" }}>Inscripciones</span>
+            <span style={{ color: "#a1c1d8", cursor: "pointer", fontSize: "13px" }} onClick={() => setLocation("/admin/settings")}>Configuración</span>
+            <span style={{ color: "#a1c1d8", cursor: "pointer", fontSize: "13px" }} onClick={() => setLocation("/admin/products")}>Productos</span>
+          </nav>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
           <p style={{
             fontFamily: "'Montserrat', sans-serif",
             fontSize: 12,
             color: "var(--dreamer-blue)",
             margin: 0,
           }}>
-            Logged in as: {userEmail}
+            {userEmail}
           </p>
-        </div>
         <button
           onClick={() => {
             logout();

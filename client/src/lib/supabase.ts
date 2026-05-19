@@ -29,10 +29,19 @@ export type CollectionSetting = {
   tag: string;
 };
 
+export type Product = {
+  id: string;
+  code: string;
+  price: string;
+  sizes: string;
+  img: string;
+};
+
 export type SiteSettings = {
   hero_img: string;
   essence_img: string;
   collections: CollectionSetting[];
+  products?: Product[];
 };
 
 class SupabaseWrapper {

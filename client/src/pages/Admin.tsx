@@ -179,9 +179,14 @@ export default function Admin() {
         justifyContent: "space-between",
         alignItems: "center",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
           <img src={DREAMER_LOGO} alt="DREAMER" style={{ height: "40px", filter: "brightness(0) invert(1)" }} />
-          <span style={{ fontSize: "16px", letterSpacing: "2px", color: "#A1C1D8" }}>CONTENT SETTINGS</span>
+          <span style={{ fontSize: "16px", letterSpacing: "2px", color: "#A1C1D8", fontWeight: "bold" }}>DREAMER ADMIN</span>
+          <nav style={{ display: "flex", gap: "16px", marginLeft: "20px" }}>
+            <span style={{ color: "#a1c1d8", cursor: "pointer", fontSize: "13px" }} onClick={() => setLocation("/admin")}>Inscripciones</span>
+            <span style={{ color: "#fff", cursor: "pointer", fontSize: "13px", fontWeight: "bold", borderBottom: "1px solid #fff" }}>Configuración</span>
+            <span style={{ color: "#a1c1d8", cursor: "pointer", fontSize: "13px" }} onClick={() => setLocation("/admin/products")}>Productos</span>
+          </nav>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
           <span style={{ fontSize: "13px", color: "#a1c1d8" }}>admin · {userEmail}</span>

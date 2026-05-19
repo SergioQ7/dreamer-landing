@@ -1,0 +1,292 @@
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLocation, Link } from "wouter";
+import { supabase, SiteSettings, Product } from "@/lib/supabase";
+import { toast } from "sonner";
+
+export default function AdminProducts() {
+  const { isAuthenticated, isLoading: authLoading, logout, userEmail } = useAuth();
+  const [, setLocation] = useLocation();
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      setLocation("/login");
+    }
+  }, [isAuthenticated, authLoading, setLocation]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadSettings();
+    }
+  }, [isAuthenticated]);
+
+  const loadSettings = async () => {
+    setLoading(true);
+    try {
+      const data = await supabase.getSiteSettings();
+      if (data) {
+        setSettings(data);
+        setProducts(data.products || []);
+      }
+    } catch (error) {
+      console.error("Error loading products:", error);
+      toast.error("Error al cargar productos", {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveProduct = async () => {
+    if (!editingProduct && !isAddingNew) return;
+    
+    setSaving(true);
+    try {
+      let updatedProducts = [...products];
+      
+      if (isAddingNew && editingProduct) {
+        const newProduct = {
+          ...editingProduct,
+          id: Date.now().toString()
+        };
+        updatedProducts.push(newProduct);
+      } else if (editingProduct) {
+        updatedProducts = updatedProducts.map(p => 
+          p.id === editingProduct.id ? editingProduct : p
+        );
+      }
+
+      const newSettings = { ...(settings as SiteSettings), products: updatedProducts };
+      await supabase.saveSiteSettings(newSettings);
+      
+      setSettings(newSettings);
+      setProducts(updatedProducts);
+      setEditingProduct(null);
+      setIsAddingNew(false);
+      
+      toast.success("Producto guardado", {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } catch (error) {
+      console.error("Error saving product:", error);
+      toast.error("Error al guardar producto", {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    if (!confirm("¿Estás seguro de que quieres eliminar este producto?")) return;
+    
+    setSaving(true);
+    try {
+      const updatedProducts = products.filter(p => p.id !== id);
+      const newSettings = { ...(settings as SiteSettings), products: updatedProducts };
+      await supabase.saveSiteSettings(newSettings);
+      
+      setSettings(newSettings);
+      setProducts(updatedProducts);
+      
+      toast.success("Producto eliminado", {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      toast.error("Error al eliminar producto", {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading || authLoading) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#071729", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ color: "#A1C1D8", fontSize: "18px" }}>Cargando...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#071729", color: "#F5F0EB", fontFamily: "'Montserrat', sans-serif" }}>
+      {/* Header */}
+      <div style={{
+        background: "#1a1a2e",
+        borderBottom: "1px solid rgba(161,193,216,0.15)",
+        padding: "20px 40px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+          <span style={{ fontSize: "16px", letterSpacing: "2px", color: "#A1C1D8", fontWeight: "bold" }}>DREAMER ADMIN</span>
+          <nav style={{ display: "flex", gap: "16px" }}>
+            <Link href="/admin"><span style={{ color: "#a1c1d8", cursor: "pointer", fontSize: "13px" }}>Inscripciones</span></Link>
+            <Link href="/admin/settings"><span style={{ color: "#a1c1d8", cursor: "pointer", fontSize: "13px" }}>Configuración</span></Link>
+            <span style={{ color: "#fff", cursor: "pointer", fontSize: "13px", fontWeight: "bold", borderBottom: "1px solid #fff" }}>Productos</span>
+          </nav>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+          <span style={{ fontSize: "13px", color: "#a1c1d8" }}>{userEmail}</span>
+          <button
+            onClick={() => { logout(); setLocation("/login"); }}
+            style={{
+              padding: "8px 16px",
+              background: "transparent",
+              border: "1px solid rgba(161,193,216,0.3)",
+              color: "#A1C1D8",
+              cursor: "pointer",
+              fontSize: "12px",
+              borderRadius: "4px"
+            }}
+          >
+            Salir
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
+          <h2 style={{ fontSize: "24px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: "600" }}>
+            Gestión de Catálogo
+          </h2>
+          <button
+            onClick={() => {
+              setIsAddingNew(true);
+              setEditingProduct({ id: "", code: "", price: "", sizes: "", img: "" });
+            }}
+            style={{
+              padding: "10px 20px",
+              background: "#A1C1D8",
+              color: "#071729",
+              border: "none",
+              fontWeight: "600",
+              cursor: "pointer",
+              fontSize: "13px",
+              borderRadius: "4px"
+            }}
+          >
+            + Agregar Producto
+          </button>
+        </div>
+
+        {/* Product Editor Modal / Form */}
+        {(isAddingNew || editingProduct) && (
+          <div style={{
+            background: "#1a1a2e",
+            border: "1px solid rgba(161,193,216,0.3)",
+            padding: "24px",
+            marginBottom: "40px",
+            borderRadius: "8px"
+          }}>
+            <h3 style={{ fontSize: "16px", color: "#A1C1D8", marginBottom: "20px" }}>
+              {isAddingNew ? "Nuevo Producto" : "Editar Producto"}
+            </h3>
+            
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "20px" }}>
+              <div>
+                <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>CÓDIGO / REFERENCIA</label>
+                <input
+                  type="text"
+                  value={editingProduct?.code || ""}
+                  onChange={(e) => setEditingProduct(prev => prev ? {...prev, code: e.target.value} : null)}
+                  style={{ width: "100%", padding: "10px", background: "transparent", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }}
+                />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>PRECIO MAYORISTA</label>
+                <input
+                  type="text"
+                  value={editingProduct?.price || ""}
+                  onChange={(e) => setEditingProduct(prev => prev ? {...prev, price: e.target.value} : null)}
+                  style={{ width: "100%", padding: "10px", background: "transparent", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }}
+                />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>TALLAS DISPONIBLES</label>
+                <input
+                  type="text"
+                  placeholder="Ej: S, M, L, XL"
+                  value={editingProduct?.sizes || ""}
+                  onChange={(e) => setEditingProduct(prev => prev ? {...prev, sizes: e.target.value} : null)}
+                  style={{ width: "100%", padding: "10px", background: "transparent", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }}
+                />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>URL DE IMAGEN</label>
+                <input
+                  type="text"
+                  value={editingProduct?.img || ""}
+                  onChange={(e) => setEditingProduct(prev => prev ? {...prev, img: e.target.value} : null)}
+                  style={{ width: "100%", padding: "10px", background: "transparent", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: "16px" }}>
+              <button
+                onClick={handleSaveProduct}
+                disabled={saving}
+                style={{ padding: "10px 20px", background: "#A1C1D8", color: "#071729", border: "none", fontWeight: "600", cursor: saving ? "not-allowed" : "pointer", borderRadius: "4px" }}
+              >
+                {saving ? "Guardando..." : "Guardar Producto"}
+              </button>
+              <button
+                onClick={() => { setEditingProduct(null); setIsAddingNew(false); }}
+                style={{ padding: "10px 20px", background: "transparent", color: "#A1C1D8", border: "1px solid rgba(161,193,216,0.3)", cursor: "pointer", borderRadius: "4px" }}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Products List */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "24px" }}>
+          {products.map(product => (
+            <div key={product.id} style={{ background: "#1a1a2e", border: "1px solid rgba(161,193,216,0.15)", borderRadius: "8px", overflow: "hidden" }}>
+              <img src={product.img} alt={product.code} style={{ width: "100%", height: "300px", objectFit: "cover" }} />
+              <div style={{ padding: "16px" }}>
+                <h4 style={{ margin: "0 0 8px 0", fontSize: "16px", color: "#fff" }}>{product.code}</h4>
+                <p style={{ margin: "0 0 4px 0", fontSize: "14px", color: "#A1C1D8" }}>${product.price}</p>
+                <p style={{ margin: "0 0 16px 0", fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>Tallas: {product.sizes}</p>
+                
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button 
+                    onClick={() => { setEditingProduct(product); setIsAddingNew(false); }}
+                    style={{ flex: 1, padding: "8px", background: "rgba(161,193,216,0.1)", border: "none", color: "#A1C1D8", cursor: "pointer", borderRadius: "4px" }}
+                  >
+                    Editar
+                  </button>
+                  <button 
+                    onClick={() => handleDeleteProduct(product.id)}
+                    style={{ flex: 1, padding: "8px", background: "rgba(255,59,48,0.1)", border: "none", color: "#ff3b30", cursor: "pointer", borderRadius: "4px" }}
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+          {products.length === 0 && !isAddingNew && (
+            <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px", color: "#A1C1D8" }}>
+              No hay productos registrados. Haz clic en "Agregar Producto" para comenzar.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
