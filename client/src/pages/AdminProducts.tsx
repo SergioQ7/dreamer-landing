@@ -15,6 +15,84 @@ export default function AdminProducts() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [uploadingImg, setUploadingImg] = useState(false);
+  
+  const [draftProducts, setDraftProducts] = useState<Partial<Product>[]>([]);
+  const [uploadingBulk, setUploadingBulk] = useState(false);
+
+  const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    
+    setUploadingBulk(true);
+    const newDrafts: Partial<Product>[] = [];
+    
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const publicUrl = await supabase.uploadProductImage(file);
+        newDrafts.push({
+          id: `draft_${Date.now()}_${i}`,
+          img: publicUrl,
+          code: "",
+          price: "",
+          sizes: "S, M, L",
+          category: ""
+        });
+      }
+      setDraftProducts(prev => [...prev, ...newDrafts]);
+      toast.success(`${files.length} imágenes cargadas. Completa los datos abajo.`, {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } catch (error) {
+      console.error("Bulk upload error:", error);
+      toast.error("Error al subir algunas imágenes. Asegúrate de tener el bucket 'products' creado.", {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } finally {
+      setUploadingBulk(false);
+      e.target.value = ''; // Reset input
+    }
+  };
+
+  const handleSaveDrafts = async () => {
+    if (draftProducts.some(d => !d.code || !d.price)) {
+      toast.error("Por favor completa el código y precio de todos los productos", {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+      return;
+    }
+    
+    setSaving(true);
+    try {
+      const newProducts = draftProducts.map(d => ({
+        id: Date.now().toString() + Math.random().toString(36).substring(7),
+        code: d.code,
+        price: d.price,
+        sizes: d.sizes || "",
+        img: d.img,
+        category: d.category || ""
+      })) as Product[];
+      
+      const updatedProducts = [...newProducts, ...products];
+      const newSettings = { ...(settings as SiteSettings), products: updatedProducts };
+      await supabase.saveSiteSettings(newSettings);
+      
+      setSettings(newSettings);
+      setProducts(updatedProducts);
+      setDraftProducts([]);
+      
+      toast.success(`${newProducts.length} productos guardados exitosamente`, {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } catch (error) {
+      console.error("Error saving bulk products:", error);
+      toast.error("Error al guardar productos", {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -216,17 +294,39 @@ export default function AdminProducts() {
               }}
               style={{
                 padding: "10px 20px",
-                background: "#A1C1D8",
-                color: "#071729",
-                border: "none",
+                background: "transparent",
+                color: "#A1C1D8",
+                border: "1px solid rgba(161,193,216,0.3)",
                 fontWeight: "600",
                 cursor: "pointer",
                 fontSize: "13px",
                 borderRadius: "4px"
               }}
             >
-              + Agregar Producto
+              + 1 Producto
             </button>
+            <label style={{
+              padding: "10px 20px",
+              background: "#A1C1D8",
+              color: "#071729",
+              border: "none",
+              fontWeight: "600",
+              cursor: uploadingBulk ? "not-allowed" : "pointer",
+              fontSize: "13px",
+              borderRadius: "4px",
+              display: "inline-block",
+              opacity: uploadingBulk ? 0.7 : 1
+            }}>
+              {uploadingBulk ? "Subiendo..." : "+ Carga Masiva (Fotos)"}
+              <input 
+                type="file" 
+                multiple 
+                accept="image/*" 
+                onChange={handleBulkUpload} 
+                disabled={uploadingBulk}
+                style={{ display: "none" }} 
+              />
+            </label>
           </div>
         </div>
 
@@ -324,6 +424,96 @@ export default function AdminProducts() {
                 style={{ padding: "10px 20px", background: "transparent", color: "#A1C1D8", border: "1px solid rgba(161,193,216,0.3)", cursor: "pointer", borderRadius: "4px" }}
               >
                 Cancelar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Bulk Drafts */}
+        {draftProducts.length > 0 && (
+          <div style={{
+            background: "#1a1a2e",
+            border: "1px solid rgba(161,193,216,0.3)",
+            padding: "24px",
+            marginBottom: "40px",
+            borderRadius: "8px"
+          }}>
+            <h3 style={{ fontSize: "16px", color: "#A1C1D8", marginBottom: "20px" }}>
+              Carga Masiva: {draftProducts.length} producto(s) pendiente(s) por completar
+            </h3>
+            
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "24px", marginBottom: "24px" }}>
+              {draftProducts.map((draft, idx) => (
+                <div key={draft.id} style={{ background: "rgba(0,0,0,0.2)", padding: "16px", borderRadius: "8px", border: "1px solid rgba(161,193,216,0.1)" }}>
+                  <img src={draft.img} alt={`Draft ${idx}`} style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "4px", marginBottom: "16px" }} />
+                  
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <div>
+                      <label style={{ display: "block", fontSize: "10px", color: "#A1C1D8", marginBottom: "4px" }}>CÓDIGO</label>
+                      <input type="text" value={draft.code || ""} onChange={(e) => {
+                        const newDrafts = [...draftProducts];
+                        newDrafts[idx].code = e.target.value;
+                        setDraftProducts(newDrafts);
+                      }} style={{ width: "100%", padding: "8px", background: "transparent", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }} />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: "10px", color: "#A1C1D8", marginBottom: "4px" }}>PRECIO</label>
+                      <input type="text" value={draft.price || ""} onChange={(e) => {
+                        const newDrafts = [...draftProducts];
+                        newDrafts[idx].price = e.target.value;
+                        setDraftProducts(newDrafts);
+                      }} style={{ width: "100%", padding: "8px", background: "transparent", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }} />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: "10px", color: "#A1C1D8", marginBottom: "4px" }}>TALLAS</label>
+                      <input type="text" value={draft.sizes || ""} onChange={(e) => {
+                        const newDrafts = [...draftProducts];
+                        newDrafts[idx].sizes = e.target.value;
+                        setDraftProducts(newDrafts);
+                      }} style={{ width: "100%", padding: "8px", background: "transparent", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }} />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: "10px", color: "#A1C1D8", marginBottom: "4px" }}>TIPO DE PRENDA</label>
+                      <select value={draft.category || ""} onChange={(e) => {
+                        const newDrafts = [...draftProducts];
+                        newDrafts[idx].category = e.target.value;
+                        setDraftProducts(newDrafts);
+                      }} style={{ width: "100%", padding: "8px", background: "#071729", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }}>
+                        <option value="">Selecciona</option>
+                        <option value="Sets">Sets</option>
+                        <option value="Dress">Dress</option>
+                        <option value="Pants">Pants</option>
+                        <option value="Jeans">Jeans</option>
+                        <option value="Shorts">Shorts</option>
+                        <option value="Tops">Tops</option>
+                        <option value="Jumpsuits">Jumpsuits</option>
+                      </select>
+                    </div>
+                  </div>
+                  <button onClick={() => {
+                    const newDrafts = [...draftProducts];
+                    newDrafts.splice(idx, 1);
+                    setDraftProducts(newDrafts);
+                  }} style={{ marginTop: "16px", width: "100%", padding: "8px", background: "rgba(255,59,48,0.1)", border: "none", color: "#ff3b30", cursor: "pointer", borderRadius: "4px" }}>
+                    Eliminar
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: "flex", gap: "16px" }}>
+              <button
+                onClick={handleSaveDrafts}
+                disabled={saving}
+                style={{ padding: "10px 20px", background: "#A1C1D8", color: "#071729", border: "none", fontWeight: "600", cursor: saving ? "not-allowed" : "pointer", borderRadius: "4px" }}
+              >
+                {saving ? "Guardando..." : "Guardar Todos los Productos"}
+              </button>
+              <button
+                onClick={() => setDraftProducts([])}
+                style={{ padding: "10px 20px", background: "transparent", color: "#A1C1D8", border: "1px solid rgba(161,193,216,0.3)", cursor: "pointer", borderRadius: "4px" }}
+              >
+                Cancelar Carga Masiva
               </button>
             </div>
           </div>
