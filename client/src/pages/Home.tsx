@@ -201,6 +201,11 @@ function Navigation({ onApply }: { onApply: () => void }) {
             {label}
           </button>
         ))}
+        <a href="/catalogo" style={{ textDecoration: "none" }}>
+          <button className="btn-outline-luxury" style={{ padding: "12px 24px" }}>
+            <span>View Catalog</span>
+          </button>
+        </a>
         <button onClick={onApply} className="btn-luxury" style={{ padding: "12px 24px" }}>
           <span>Apply for Access</span>
         </button>
@@ -245,6 +250,11 @@ function Navigation({ onApply }: { onApply: () => void }) {
               {label}
             </button>
           ))}
+          <a href="/catalogo" style={{ textDecoration: "none" }}>
+            <button className="btn-outline-luxury" style={{ alignSelf: "flex-start", width: "100%", padding: "12px 24px" }}>
+              <span>View Catalog</span>
+            </button>
+          </a>
           <button onClick={() => { onApply(); setMenuOpen(false); }} className="btn-luxury" style={{ alignSelf: "flex-start" }}>
             <span>Apply for Access</span>
           </button>
