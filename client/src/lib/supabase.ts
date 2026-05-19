@@ -108,6 +108,26 @@ class SupabaseWrapper {
       .upsert({ key: 'main', value: data }, { onConflict: 'key' });
     if (error) throw error;
   }
+
+  async uploadProductImage(file: File): Promise<string> {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    // Upload to 'products' bucket
+    const { error: uploadError } = await this.client.storage
+      .from('products')
+      .upload(filePath, file);
+
+    if (uploadError) throw uploadError;
+
+    // Get public URL
+    const { data } = this.client.storage
+      .from('products')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  }
 }
 
 export const supabase = new SupabaseWrapper();

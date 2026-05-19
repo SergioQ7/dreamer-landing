@@ -14,6 +14,28 @@ export default function AdminProducts() {
   
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
+  const [uploadingImg, setUploadingImg] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImg(true);
+    try {
+      const publicUrl = await supabase.uploadProductImage(file);
+      setEditingProduct(prev => prev ? { ...prev, img: publicUrl } : null);
+      toast.success("Imagen cargada exitosamente", {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Error al cargar imagen. Asegúrate de tener el bucket 'products' creado.", {
+        style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
+      });
+    } finally {
+      setUploadingImg(false);
+    }
+  };
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -251,13 +273,24 @@ export default function AdminProducts() {
                 />
               </div>
               <div>
-                <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>URL DE IMAGEN</label>
-                <input
-                  type="text"
-                  value={editingProduct?.img || ""}
-                  onChange={(e) => setEditingProduct(prev => prev ? {...prev, img: e.target.value} : null)}
-                  style={{ width: "100%", padding: "10px", background: "transparent", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }}
-                />
+                <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>IMAGEN (CARGAR O URL)</label>
+                <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploadingImg}
+                    style={{ width: "100%", padding: "8px", background: "rgba(161,193,216,0.05)", border: "1px dashed rgba(161,193,216,0.3)", color: "#A1C1D8", borderRadius: "4px", fontSize: "12px", cursor: uploadingImg ? "not-allowed" : "pointer" }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="O pega la URL de la imagen aquí..."
+                    value={editingProduct?.img || ""}
+                    onChange={(e) => setEditingProduct(prev => prev ? {...prev, img: e.target.value} : null)}
+                    style={{ width: "100%", padding: "10px", background: "transparent", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }}
+                  />
+                  {uploadingImg && <span style={{ fontSize: "11px", color: "#A1C1D8" }}>Subiendo imagen...</span>}
+                </div>
               </div>
             </div>
 
