@@ -10,6 +10,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import CustomCursor from "./components/CustomCursor";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
@@ -38,6 +39,7 @@ function App() {
       <AuthProvider>
         <ThemeProvider defaultTheme="dark">
           <TooltipProvider>
+            <CustomCursor />
             <Toaster
               position="bottom-right"
               toastOptions={{
