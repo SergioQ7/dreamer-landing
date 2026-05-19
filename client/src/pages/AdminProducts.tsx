@@ -390,7 +390,7 @@ export default function AdminProducts() {
                 </select>
               </div>
               <div style={{ gridColumn: "1 / -1" }}>
-                <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>IMAGEN (CARGAR O URL)</label>
+                <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>IMAGEN PRINCIPAL (CARGAR O URL)</label>
                 <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
                   <input
                     type="file"
@@ -408,6 +408,47 @@ export default function AdminProducts() {
                   />
                   {uploadingImg && <span style={{ fontSize: "11px", color: "#A1C1D8" }}>Subiendo imagen...</span>}
                 </div>
+              </div>
+              <div style={{ gridColumn: "1 / -1", borderTop: "1px solid rgba(161,193,216,0.2)", paddingTop: "16px" }}>
+                <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>COLORES ADICIONALES (Subir múltiples imágenes)</label>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "10px" }}>
+                  {editingProduct?.images?.map((img, idx) => (
+                    <div key={idx} style={{ position: "relative", width: "80px", height: "80px" }}>
+                      <img src={img} alt={`Extra ${idx}`} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "4px", border: "1px solid rgba(161,193,216,0.3)" }} />
+                      <button onClick={() => {
+                        const newImages = [...(editingProduct.images || [])];
+                        newImages.splice(idx, 1);
+                        setEditingProduct(prev => prev ? { ...prev, images: newImages } : null);
+                      }} style={{ position: "absolute", top: "-5px", right: "-5px", background: "#ff3b30", color: "white", border: "none", borderRadius: "50%", width: "20px", height: "20px", cursor: "pointer", fontSize: "10px", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}>
+                        X
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const files = e.target.files;
+                    if (!files) return;
+                    setUploadingImg(true);
+                    try {
+                      const newUrls: string[] = [];
+                      for (let i = 0; i < files.length; i++) {
+                        newUrls.push(await supabase.uploadProductImage(files[i]));
+                      }
+                      setEditingProduct(prev => prev ? { ...prev, images: [...(prev.images || []), ...newUrls] } : null);
+                    } catch (error) {
+                      toast.error("Error al subir imágenes adicionales");
+                    } finally {
+                      setUploadingImg(false);
+                      e.target.value = '';
+                    }
+                  }}
+                  disabled={uploadingImg}
+                  style={{ width: "100%", padding: "8px", background: "rgba(161,193,216,0.05)", border: "1px dashed rgba(161,193,216,0.3)", color: "#A1C1D8", borderRadius: "4px", fontSize: "12px", cursor: uploadingImg ? "not-allowed" : "pointer" }}
+                />
               </div>
             </div>
 

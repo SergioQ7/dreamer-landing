@@ -19,12 +19,14 @@ export type Inscription = {
   collections: string;
   created_at?: string;
   updated_at?: string;
+  contacted?: boolean;
 };
 
 export type CollectionSetting = {
   id: number;
   name: string;
   tagline: string;
+  pieces: string;
   img: string;
   tag: string;
 };
@@ -36,7 +38,8 @@ export interface Product {
   sizes: string;
   img: string;
   category?: string;
-};
+  images?: string[];
+}
 
 export type SiteSettings = {
   hero_img: string;

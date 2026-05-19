@@ -110,103 +110,119 @@ export default function Catalog() {
             gap: "32px" 
           }}>
             {products.map((product) => (
-              <div key={product.id} style={{ 
-                background: "#1a1a2e",
-                borderRadius: "8px",
-                overflow: "hidden",
-                border: "1px solid rgba(161,193,216,0.15)",
-                transition: "transform 0.3s, border-color 0.3s"
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-5px)";
-                e.currentTarget.style.borderColor = "rgba(161,193,216,0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.borderColor = "rgba(161,193,216,0.15)";
-              }}
-              >
-                <div style={{ position: "relative", paddingTop: "133%" /* 3:4 aspect ratio */ }}>
-                  <img 
-                    src={product.img} 
-                    alt={product.code} 
-                    style={{ 
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "100%", 
-                      height: "100%", 
-                      objectFit: "cover" 
-                    }}
-                    onError={(e) => { (e.target as HTMLImageElement).src = "https://via.placeholder.com/400x533?text=Imagen+No+Disponible"; }}
-                  />
-                  <div style={{ 
-                    position: "absolute", 
-                    top: "12px", 
-                    left: "12px", 
-                    background: "rgba(0,0,0,0.6)", 
-                    padding: "4px 8px", 
-                    borderRadius: "4px",
-                    color: "#fff",
-                    fontSize: "12px",
-                    fontWeight: "bold",
-                    letterSpacing: "1px"
-                    {product.code}
-                    {product.category && (
-                      <span style={{ 
-                        marginLeft: "8px", 
-                        background: "var(--dreamer-blue)", 
-                        color: "var(--dreamer-navy)",
-                        padding: "2px 6px", 
-                        borderRadius: "2px", 
-                        fontSize: "10px", 
-                        fontWeight: "bold",
-                        textTransform: "uppercase"
-                      }}>
-                        {product.category}
-                      </span>
-                    )}
+              <a href="/#contact" key={product.id} style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+                <div style={{ 
+                  background: "#1a1a2e",
+                  borderRadius: "8px",
+                  overflow: "hidden",
+                  border: "1px solid rgba(161,193,216,0.15)",
+                  transition: "transform 0.3s, border-color 0.3s"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-5px)";
+                  e.currentTarget.style.borderColor = "rgba(161,193,216,0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.borderColor = "rgba(161,193,216,0.15)";
+                }}
+                >
+                  <div style={{ position: "relative", paddingTop: "133%" /* 3:4 aspect ratio */ }}>
+                    <img 
+                      src={product.img} 
+                      alt={product.code} 
+                      style={{ 
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%", 
+                        height: "100%", 
+                        objectFit: "cover" 
+                      }}
+                      onError={(e) => { (e.target as HTMLImageElement).src = "https://via.placeholder.com/400x533?text=Imagen+No+Disponible"; }}
+                    />
+                    <div style={{ 
+                      position: "absolute", 
+                      top: "12px", 
+                      left: "12px", 
+                      background: "rgba(0,0,0,0.6)", 
+                      padding: "4px 8px", 
+                      borderRadius: "4px",
+                      color: "#fff",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      letterSpacing: "1px"
+                    }}>
+                      {product.code}
+                      {product.category && (
+                        <span style={{ 
+                          marginLeft: "8px", 
+                          background: "var(--dreamer-blue)", 
+                          color: "var(--dreamer-navy)",
+                          padding: "2px 6px", 
+                          borderRadius: "2px", 
+                          fontSize: "10px", 
+                          fontWeight: "bold",
+                          textTransform: "uppercase"
+                        }}>
+                          {product.category}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-                
-                <div style={{ padding: "20px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "16px" }}>
-                    <div>
-                      <h3 style={{ 
-                        margin: "0 0 4px 0", 
+                  
+                  {product.images && product.images.length > 0 && (
+                    <div style={{ display: "flex", gap: "8px", padding: "16px 20px 0 20px", overflowX: "auto" }}>
+                      <img src={product.img} alt="Main" style={{ width: "40px", height: "40px", objectFit: "cover", borderRadius: "4px", border: "2px solid #A1C1D8" }} />
+                      {product.images.map((imgSrc, i) => (
+                        <img key={i} src={imgSrc} alt={`Color ${i+1}`} style={{ width: "40px", height: "40px", objectFit: "cover", borderRadius: "4px", border: "1px solid rgba(161,193,216,0.3)" }} />
+                      ))}
+                    </div>
+                  )}
+                  
+                  <div style={{ padding: "20px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "16px" }}>
+                      <div>
+                        <h3 style={{ 
+                          margin: "0 0 4px 0", 
+                          fontSize: "12px", 
+                          color: "#a1c1d8", 
+                          textTransform: "uppercase", 
+                          letterSpacing: "1px" 
+                        }}>
+                          Precio Mayorista
+                        </h3>
+                        <span style={{ 
+                          fontSize: "24px", 
+                          fontWeight: "600", 
+                          color: "#fff" 
+                        }}>
+                          ${product.price}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "16px" }}>
+                      <h4 style={{ 
+                        margin: "0 0 8px 0", 
                         fontSize: "12px", 
                         color: "#a1c1d8", 
                         textTransform: "uppercase", 
                         letterSpacing: "1px" 
                       }}>
-                        Precio Mayorista
-                      </h3>
-                      <span style={{ 
-                        fontSize: "24px", 
-                        fontWeight: "600", 
-                        color: "#fff" 
-                      }}>
-                        ${product.price}
-                      </span>
+                        Tallas Disponibles
+                      </h4>
+                      <p style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#fff" }}>
+                        {product.sizes}
+                      </p>
+                      
+                      <div style={{ textAlign: "center", background: "rgba(161,193,216,0.1)", padding: "10px", borderRadius: "4px", color: "#A1C1D8", fontSize: "12px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1px" }}>
+                        Haz clic para inscribirte
+                      </div>
                     </div>
                   </div>
-                  
-                  <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "16px" }}>
-                    <h4 style={{ 
-                      margin: "0 0 8px 0", 
-                      fontSize: "12px", 
-                      color: "#a1c1d8", 
-                      textTransform: "uppercase", 
-                      letterSpacing: "1px" 
-                    }}>
-                      Tallas Disponibles
-                    </h4>
-                    <p style={{ margin: 0, fontSize: "14px", color: "#fff" }}>
-                      {product.sizes}
-                    </p>
-                  </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         )}
