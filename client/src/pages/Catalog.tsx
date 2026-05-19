@@ -37,7 +37,7 @@ export default function Catalog() {
   if (loading) {
     return (
       <div style={{ minHeight: "100vh", background: "#071729", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ color: "#A1C1D8", fontSize: "18px", textAlign: "center" }}>Cargando catálogo...</div>
+        <div style={{ color: "#A1C1D8", fontSize: "18px", textAlign: "center" }}>Loading catalog...</div>
       </div>
     );
   }
@@ -64,7 +64,7 @@ export default function Catalog() {
           </Link>
           <div style={{ display: "flex", gap: "20px" }}>
             <Link href="/">
-              <span style={{ color: "#A1C1D8", textDecoration: "none", fontSize: "14px", cursor: "pointer", letterSpacing: "1px", textTransform: "uppercase" }}>Inicio</span>
+              <span style={{ color: "#A1C1D8", textDecoration: "none", fontSize: "14px", cursor: "pointer", letterSpacing: "1px", textTransform: "uppercase" }}>Home</span>
             </Link>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function Catalog() {
           marginBottom: "16px",
           textTransform: "uppercase"
         }}>
-          Catálogo Oficial
+          Official Catalog
         </h1>
         <p style={{ 
           fontSize: "clamp(14px, 3vw, 18px)", 
@@ -93,7 +93,7 @@ export default function Catalog() {
           margin: "0 auto",
           lineHeight: 1.6 
         }}>
-          Descubre nuestra última colección. Diseños exclusivos y calidad premium en cada prenda.
+          Discover our latest collection. Exclusive designs and premium quality in every piece.
         </p>
       </section>
 
@@ -101,7 +101,7 @@ export default function Catalog() {
       <section style={{ padding: "40px 24px", maxWidth: "1200px", margin: "0 auto" }}>
         {products.length === 0 ? (
           <div style={{ textAlign: "center", color: "#a1c1d8", padding: "60px 0", fontSize: "18px" }}>
-            No hay productos disponibles por el momento.
+            No products available at the moment.
           </div>
         ) : (
           <div style={{ 
@@ -190,7 +190,7 @@ export default function Catalog() {
                           textTransform: "uppercase", 
                           letterSpacing: "1px" 
                         }}>
-                          Precio Mayorista
+                          Wholesale Price
                         </h3>
                         <span style={{ 
                           fontSize: "24px", 
@@ -210,14 +210,14 @@ export default function Catalog() {
                         textTransform: "uppercase", 
                         letterSpacing: "1px" 
                       }}>
-                        Tallas Disponibles
+                        Available Sizes
                       </h4>
                       <p style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#fff" }}>
                         {product.sizes}
                       </p>
                       
                       <div style={{ textAlign: "center", background: "rgba(161,193,216,0.1)", padding: "10px", borderRadius: "4px", color: "#A1C1D8", fontSize: "12px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1px" }}>
-                        Haz clic para inscribirte
+                        Click to apply
                       </div>
                     </div>
                   </div>
@@ -241,7 +241,7 @@ export default function Catalog() {
           style={{ height: "24px", filter: "brightness(0) invert(1)", marginBottom: "16px", opacity: 0.5 }}
         />
         <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>
-          © {new Date().getFullYear()} DREAMER Jeans. Todos los derechos reservados.
+          © {new Date().getFullYear()} DREAMER Jeans. All rights reserved.
         </p>
       </footer>
     </div>
