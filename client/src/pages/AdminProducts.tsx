@@ -162,24 +162,42 @@ export default function AdminProducts() {
           <h2 style={{ fontSize: "24px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: "600" }}>
             Gestión de Catálogo
           </h2>
-          <button
-            onClick={() => {
-              setIsAddingNew(true);
-              setEditingProduct({ id: "", code: "", price: "", sizes: "", img: "" });
-            }}
-            style={{
-              padding: "10px 20px",
-              background: "#A1C1D8",
-              color: "#071729",
-              border: "none",
-              fontWeight: "600",
-              cursor: "pointer",
-              fontSize: "13px",
-              borderRadius: "4px"
-            }}
-          >
-            + Agregar Producto
-          </button>
+          <div style={{ display: "flex", gap: "16px" }}>
+            <Link href="/catalogo">
+              <button
+                style={{
+                  padding: "10px 20px",
+                  background: "transparent",
+                  color: "#A1C1D8",
+                  border: "1px solid rgba(161,193,216,0.3)",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  borderRadius: "4px"
+                }}
+              >
+                Ver Catálogo
+              </button>
+            </Link>
+            <button
+              onClick={() => {
+                setIsAddingNew(true);
+                setEditingProduct({ id: "", code: "", price: "", sizes: "", img: "" });
+              }}
+              style={{
+                padding: "10px 20px",
+                background: "#A1C1D8",
+                color: "#071729",
+                border: "none",
+                fontWeight: "600",
+                cursor: "pointer",
+                fontSize: "13px",
+                borderRadius: "4px"
+              }}
+            >
+              + Agregar Producto
+            </button>
+          </div>
         </div>
 
         {/* Product Editor Modal / Form */}
