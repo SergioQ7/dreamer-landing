@@ -346,8 +346,8 @@ function HeroSection({ onApply, heroImg }: { onApply: () => void; heroImg: strin
             marginBottom: 40,
           }}
         >
-          Exclusive wholesale collections for Miami's premier boutiques.
-          Colombian craftsmanship, global vision.
+          Exclusive wholesale collections for premier boutiques.
+          Designed with intention, created for a global lifestyle
         </p>
 
         <div className="hero-animate hero-animate-4" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
