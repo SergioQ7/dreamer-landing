@@ -46,6 +46,7 @@ export type SiteSettings = {
   essence_img: string;
   collections: CollectionSetting[];
   products?: Product[];
+  catalog_password?: string;
 };
 
 class SupabaseWrapper {

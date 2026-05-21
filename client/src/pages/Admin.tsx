@@ -70,6 +70,7 @@ export default function Admin() {
   const [saving, setSaving] = useState(false);
   const [heroImg, setHeroImg] = useState(DEFAULT_SETTINGS.hero_img);
   const [essenceImg, setEssenceImg] = useState(DEFAULT_SETTINGS.essence_img);
+  const [catalogPassword, setCatalogPassword] = useState("");
   const [editingCollection, setEditingCollection] = useState<number | null>(null);
   const [draftCollection, setDraftCollection] = useState<CollectionSetting | null>(null);
 
@@ -93,6 +94,7 @@ export default function Admin() {
         setSettings(data);
         setHeroImg(data.hero_img);
         setEssenceImg(data.essence_img);
+        setCatalogPassword(data.catalog_password || "");
       }
     } catch (error) {
       console.error("Error loading settings:", error);
@@ -107,15 +109,15 @@ export default function Admin() {
   const handleSaveAssets = async () => {
     setSaving(true);
     try {
-      const newSettings = { ...settings, hero_img: heroImg, essence_img: essenceImg };
+      const newSettings = { ...settings, hero_img: heroImg, essence_img: essenceImg, catalog_password: catalogPassword };
       await supabase.saveSiteSettings(newSettings);
       setSettings(newSettings);
-      toast.success("Images updated successfully", {
+      toast.success("Settings updated successfully", {
         style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
       });
     } catch (error) {
       console.error("Error saving assets:", error);
-      toast.error("Failed to save images", {
+      toast.error("Failed to save settings", {
         style: { background: "#1a1a2e", color: "white", border: "1px solid rgba(161,193,216,0.2)" },
       });
     } finally {
@@ -382,6 +384,85 @@ export default function Admin() {
                 {saving ? "Saving..." : "Save Image"}
               </button>
             </div>
+          </div>
+        </section>
+
+        {/* Security Section */}
+        <section style={{ marginBottom: "60px" }}>
+          <h2 style={{
+            fontSize: "clamp(24px, 5vw, 36px)",
+            letterSpacing: "4px",
+            marginBottom: "30px",
+            color: "#F5F0EB",
+            textTransform: "uppercase",
+            fontWeight: "600",
+          }}>Security</h2>
+
+          <div style={{
+            background: "#1a1a2e",
+            border: "1px solid rgba(161,193,216,0.15)",
+            padding: "24px",
+            maxWidth: "600px",
+          }}>
+            <label style={{
+              display: "block",
+              fontSize: "10px",
+              letterSpacing: "2px",
+              color: "#A1C1D8",
+              textTransform: "uppercase",
+              marginBottom: "12px",
+            }}>Catalog Access Password (To View Prices)</label>
+
+            <input
+              type="text"
+              value={catalogPassword}
+              onChange={(e) => setCatalogPassword(e.target.value)}
+              placeholder="e.g. DREAMERVIP"
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                background: "transparent",
+                border: "1px solid rgba(161,193,216,0.2)",
+                color: "#F5F0EB",
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: "13px",
+                marginBottom: "16px",
+                boxSizing: "border-box",
+                transition: "border-color 0.3s",
+              }}
+              onFocus={(e) => { (e.target as HTMLInputElement).style.borderColor = "rgba(161,193,216,0.5)"; }}
+              onBlur={(e) => { (e.target as HTMLInputElement).style.borderColor = "rgba(161,193,216,0.2)"; }}
+            />
+
+            <button
+              onClick={handleSaveAssets}
+              disabled={saving}
+              style={{
+                width: "100%",
+                padding: "12px 24px",
+                background: "#A1C1D8",
+                color: "#071729",
+                border: "none",
+                fontWeight: "600",
+                letterSpacing: "1px",
+                cursor: saving ? "not-allowed" : "pointer",
+                opacity: saving ? 0.6 : 1,
+                fontSize: "12px",
+                textTransform: "uppercase",
+                transition: "all 0.3s",
+              }}
+              onMouseEnter={(e) => {
+                if (!saving) (e.target as HTMLButtonElement).style.background = "#c5d9e8";
+              }}
+              onMouseLeave={(e) => {
+                if (!saving) (e.target as HTMLButtonElement).style.background = "#A1C1D8";
+              }}
+            >
+              {saving ? "Saving..." : "Save Password"}
+            </button>
+            <p style={{ marginTop: "12px", fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>
+              If you leave this blank, the prices will be public for everyone.
+            </p>
           </div>
         </section>
 

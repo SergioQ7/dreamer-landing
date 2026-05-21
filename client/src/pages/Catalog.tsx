@@ -7,6 +7,10 @@ const DEFAULT_PRODUCTS: Product[] = [];
 export default function Catalog() {
   const [products, setProducts] = useState<Product[]>(DEFAULT_PRODUCTS);
   const [loading, setLoading] = useState(true);
+  const [isUnlocked, setIsUnlocked] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [inputPassword, setInputPassword] = useState("");
+  const [actualPassword, setActualPassword] = useState("");
 
   useEffect(() => {
     loadSettings();
@@ -18,8 +22,21 @@ export default function Catalog() {
     setLoading(true);
     try {
       const data = await supabase.getSiteSettings();
-      if (data && data.products) {
-        setProducts(data.products);
+      if (data) {
+        if (data.products) {
+          setProducts(data.products);
+        }
+        if (data.catalog_password) {
+          setActualPassword(data.catalog_password);
+          const saved = localStorage.getItem('dreamer_unlocked_prices');
+          if (saved === data.catalog_password) {
+            setIsUnlocked(true);
+          } else {
+            setIsUnlocked(false);
+          }
+        } else {
+          setIsUnlocked(true);
+        }
       }
     } catch (error) {
       console.error("Error loading products:", error);
@@ -186,13 +203,33 @@ export default function Catalog() {
                         }}>
                           Wholesale Price
                         </h3>
-                        <span style={{ 
-                          fontSize: "24px", 
-                          fontWeight: "600", 
-                          color: "#fff" 
-                        }}>
-                          ${product.price}
-                        </span>
+                        {isUnlocked ? (
+                          <span style={{ 
+                            fontSize: "24px", 
+                            fontWeight: "600", 
+                            color: "#fff" 
+                          }}>
+                            ${product.price}
+                          </span>
+                        ) : (
+                          <button 
+                            onClick={(e) => { e.preventDefault(); setShowModal(true); }}
+                            style={{ 
+                              background: "rgba(161,193,216,0.1)", 
+                              border: "1px solid rgba(161,193,216,0.3)",
+                              color: "#A1C1D8",
+                              padding: "4px 12px",
+                              borderRadius: "4px",
+                              fontSize: "12px",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px"
+                            }}
+                          >
+                            <span>🔒</span> Unlock Price
+                          </button>
+                        )}
                       </div>
                     </div>
                     
@@ -222,6 +259,49 @@ export default function Catalog() {
         )}
       </section>
       
+      {/* Unlock Modal */}
+      {showModal && (
+        <div style={{
+          position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
+          background: "rgba(0,0,0,0.8)", backdropFilter: "blur(5px)",
+          display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100
+        }}>
+          <div style={{ background: "#1a1a2e", padding: "32px", borderRadius: "8px", maxWidth: "400px", width: "90%", border: "1px solid rgba(161,193,216,0.2)" }}>
+            <h2 style={{ fontFamily: "'Anton', sans-serif", fontSize: "24px", color: "#fff", marginBottom: "8px", letterSpacing: "1px", textTransform: "uppercase" }}>Enter Access Code</h2>
+            <p style={{ fontSize: "14px", color: "#a1c1d8", marginBottom: "24px" }}>Enter the VIP access code to view wholesale prices.</p>
+            <input 
+              type="text" 
+              value={inputPassword}
+              onChange={(e) => setInputPassword(e.target.value)}
+              placeholder="Access Code"
+              style={{ width: "100%", padding: "12px", background: "rgba(0,0,0,0.5)", border: "1px solid rgba(161,193,216,0.3)", color: "#fff", marginBottom: "16px", borderRadius: "4px", boxSizing: "border-box" }}
+            />
+            <div style={{ display: "flex", gap: "12px" }}>
+              <button 
+                onClick={() => {
+                  if (inputPassword === actualPassword) {
+                    setIsUnlocked(true);
+                    localStorage.setItem('dreamer_unlocked_prices', actualPassword);
+                    setShowModal(false);
+                  } else {
+                    alert("Incorrect code. Please try again.");
+                  }
+                }}
+                style={{ flex: 1, padding: "12px", background: "#A1C1D8", color: "#071729", border: "none", borderRadius: "4px", fontWeight: "bold", cursor: "pointer", fontSize: "12px", textTransform: "uppercase" }}
+              >
+                Unlock
+              </button>
+              <button 
+                onClick={() => setShowModal(false)}
+                style={{ flex: 1, padding: "12px", background: "transparent", border: "1px solid rgba(161,193,216,0.3)", color: "#A1C1D8", borderRadius: "4px", fontWeight: "bold", cursor: "pointer", fontSize: "12px", textTransform: "uppercase" }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
       <footer style={{ 
         padding: "40px 24px", 
