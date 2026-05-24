@@ -366,20 +366,22 @@ export default function AdminProducts() {
               </div>
               <div>
                 <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>TIPO DE PRENDA</label>
-                <select
+                <input
+                  list="category-options"
+                  placeholder="Ej: Sets, Dress, o escribe una nueva..."
                   value={editingProduct?.category || ""}
                   onChange={(e) => setEditingProduct(prev => prev ? {...prev, category: e.target.value} : null)}
                   style={{ width: "100%", padding: "10px", background: "#071729", border: "1px solid rgba(161,193,216,0.2)", color: "#fff", borderRadius: "4px" }}
-                >
-                  <option value="">Selecciona una opción</option>
-                  <option value="Sets">Sets</option>
-                  <option value="Dress">Dress</option>
-                  <option value="Pants">Pants</option>
-                  <option value="Jeans">Jeans</option>
-                  <option value="Shorts">Shorts</option>
-                  <option value="Tops">Tops</option>
-                  <option value="Jumpsuits">Jumpsuits</option>
-                </select>
+                />
+                <datalist id="category-options">
+                  <option value="Sets" />
+                  <option value="Dress" />
+                  <option value="Pants" />
+                  <option value="Jeans" />
+                  <option value="Shorts" />
+                  <option value="Tops" />
+                  <option value="Jumpsuits" />
+                </datalist>
               </div>
               <div style={{ gridColumn: "1 / -1" }}>
                 <label style={{ display: "block", fontSize: "11px", color: "#A1C1D8", marginBottom: "6px" }}>IMAGEN PRINCIPAL (CARGAR O URL)</label>
