@@ -265,26 +265,92 @@ export default function Catalog() {
 
       {/* Filters Bar */}
       {products.length > 0 && (
-        <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px 24px 0", display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "flex-end" }}>
-          <select 
-            value={selectedCategory} 
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            style={{ padding: "10px", background: "#1a1a2e", color: "#F5F0EB", border: "1px solid rgba(161,193,216,0.3)", borderRadius: "4px", fontSize: "12px", outline: "none", cursor: "pointer", textTransform: "uppercase", letterSpacing: "1px" }}
-          >
-            {["ALL", ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))].map(cat => (
-              <option key={cat} value={cat}>{cat === "ALL" ? "All Categories" : cat}</option>
-            ))}
-          </select>
+        <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 24px 0", display: "flex", flexDirection: "column", gap: "24px" }}>
           
-          <select 
-            value={sortPrice} 
-            onChange={(e) => setSortPrice(e.target.value as any)}
-            style={{ padding: "10px", background: "#1a1a2e", color: "#F5F0EB", border: "1px solid rgba(161,193,216,0.3)", borderRadius: "4px", fontSize: "12px", outline: "none", cursor: "pointer", textTransform: "uppercase", letterSpacing: "1px" }}
-          >
-            <option value="NONE">Sort by Price</option>
-            <option value="ASC">Price: Low to High</option>
-            <option value="DESC">Price: High to Low</option>
-          </select>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "20px", borderBottom: "1px solid rgba(161,193,216,0.1)", paddingBottom: "20px" }}>
+            
+            {/* Categories as Tabs */}
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", flex: 1 }}>
+              {["ALL", ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))].map(cat => {
+                const isSelected = selectedCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat as string)}
+                    style={{
+                      padding: "8px 20px",
+                      background: isSelected ? "#A1C1D8" : "transparent",
+                      color: isSelected ? "#071729" : "#a1c1d8",
+                      border: `1px solid ${isSelected ? "#A1C1D8" : "rgba(161,193,216,0.3)"}`,
+                      borderRadius: "30px",
+                      fontSize: "11px",
+                      textTransform: "uppercase",
+                      letterSpacing: "1px",
+                      fontWeight: isSelected ? "bold" : "normal",
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.borderColor = "#A1C1D8";
+                        e.currentTarget.style.color = "#fff";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.borderColor = "rgba(161,193,216,0.3)";
+                        e.currentTarget.style.color = "#a1c1d8";
+                      }
+                    }}
+                  >
+                    {cat === "ALL" ? "All" : cat}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Sort Dropdown Container */}
+            <div style={{ position: "relative", minWidth: "200px" }}>
+              <select 
+                value={sortPrice} 
+                onChange={(e) => setSortPrice(e.target.value as any)}
+                style={{ 
+                  width: "100%",
+                  padding: "10px 16px", 
+                  background: "rgba(161,193,216,0.05)", 
+                  color: "#F5F0EB", 
+                  border: "1px solid rgba(161,193,216,0.2)", 
+                  borderRadius: "30px", 
+                  fontSize: "11px", 
+                  outline: "none", 
+                  cursor: "pointer", 
+                  textTransform: "uppercase", 
+                  letterSpacing: "1px",
+                  appearance: "none",
+                  WebkitAppearance: "none",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(161,193,216,0.5)";
+                  e.currentTarget.style.background = "rgba(161,193,216,0.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(161,193,216,0.2)";
+                  e.currentTarget.style.background = "rgba(161,193,216,0.05)";
+                }}
+              >
+                <option value="NONE" style={{background: "#071729"}}>Sort: Recommended</option>
+                <option value="ASC" style={{background: "#071729"}}>Price: Low to High</option>
+                <option value="DESC" style={{background: "#071729"}}>Price: High to Low</option>
+              </select>
+              {/* Custom SVG Arrow */}
+              <div style={{ position: "absolute", right: "16px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", display: "flex", alignItems: "center" }}>
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L5 5L9 1" stroke="#A1C1D8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
         </section>
       )}
 
