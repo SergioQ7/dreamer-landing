@@ -164,6 +164,8 @@ export default function Catalog() {
   const [showModal, setShowModal] = useState(false);
   const [inputPassword, setInputPassword] = useState("");
   const [actualPassword, setActualPassword] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
+  const [sortPrice, setSortPrice] = useState<"NONE" | "ASC" | "DESC">("NONE");
 
   useEffect(() => {
     loadSettings();
@@ -261,6 +263,31 @@ export default function Catalog() {
         </p>
       </section>
 
+      {/* Filters Bar */}
+      {products.length > 0 && (
+        <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px 24px 0", display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "flex-end" }}>
+          <select 
+            value={selectedCategory} 
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            style={{ padding: "10px", background: "#1a1a2e", color: "#F5F0EB", border: "1px solid rgba(161,193,216,0.3)", borderRadius: "4px", fontSize: "12px", outline: "none", cursor: "pointer", textTransform: "uppercase", letterSpacing: "1px" }}
+          >
+            {["ALL", ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))].map(cat => (
+              <option key={cat} value={cat}>{cat === "ALL" ? "All Categories" : cat}</option>
+            ))}
+          </select>
+          
+          <select 
+            value={sortPrice} 
+            onChange={(e) => setSortPrice(e.target.value as any)}
+            style={{ padding: "10px", background: "#1a1a2e", color: "#F5F0EB", border: "1px solid rgba(161,193,216,0.3)", borderRadius: "4px", fontSize: "12px", outline: "none", cursor: "pointer", textTransform: "uppercase", letterSpacing: "1px" }}
+          >
+            <option value="NONE">Sort by Price</option>
+            <option value="ASC">Price: Low to High</option>
+            <option value="DESC">Price: High to Low</option>
+          </select>
+        </section>
+      )}
+
       {/* Products Grid */}
       <section style={{ padding: "40px 24px", maxWidth: "1200px", margin: "0 auto" }}>
         {products.length === 0 ? (
@@ -273,14 +300,34 @@ export default function Catalog() {
             gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
             gap: "32px" 
           }}>
-            {products.map((product) => (
-              <ProductCard 
-                key={product.id} 
-                product={product} 
-                isUnlocked={isUnlocked} 
-                setShowModal={setShowModal} 
-              />
-            ))}
+            {(() => {
+              let filteredProducts = products;
+              if (selectedCategory !== "ALL") {
+                filteredProducts = filteredProducts.filter(p => p.category === selectedCategory);
+              }
+              if (sortPrice === "ASC") {
+                filteredProducts = [...filteredProducts].sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+              } else if (sortPrice === "DESC") {
+                filteredProducts = [...filteredProducts].sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+              }
+              
+              if (filteredProducts.length === 0) {
+                return (
+                  <div style={{ gridColumn: "1 / -1", textAlign: "center", color: "#a1c1d8", padding: "40px 0" }}>
+                    No products found for the selected category.
+                  </div>
+                );
+              }
+              
+              return filteredProducts.map((product) => (
+                <ProductCard 
+                  key={product.id} 
+                  product={product} 
+                  isUnlocked={isUnlocked} 
+                  setShowModal={setShowModal} 
+                />
+              ));
+            })()}
           </div>
         )}
       </section>
