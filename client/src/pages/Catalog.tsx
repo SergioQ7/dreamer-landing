@@ -166,6 +166,7 @@ export default function Catalog() {
   const [actualPassword, setActualPassword] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [sortPrice, setSortPrice] = useState<"NONE" | "ASC" | "DESC">("NONE");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     loadSettings();
@@ -267,10 +268,48 @@ export default function Catalog() {
       {products.length > 0 && (
         <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 24px 0", display: "flex", flexDirection: "column", gap: "24px" }}>
           
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "20px", borderBottom: "1px solid rgba(161,193,216,0.1)", paddingBottom: "20px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-start", gap: "20px", borderBottom: "1px solid rgba(161,193,216,0.1)", paddingBottom: "20px" }}>
             
-            {/* Categories as Tabs */}
-            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", flex: 1 }}>
+            {/* Search and Categories */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px", flex: 1, minWidth: "300px" }}>
+              {/* Search Bar */}
+              <div style={{ position: "relative", maxWidth: "350px" }}>
+                <input 
+                  type="text" 
+                  placeholder="Search by style or code..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "10px 16px 10px 40px",
+                    background: "rgba(161,193,216,0.05)",
+                    border: "1px solid rgba(161,193,216,0.2)",
+                    borderRadius: "30px",
+                    color: "#fff",
+                    fontSize: "12px",
+                    outline: "none",
+                    boxSizing: "border-box",
+                    transition: "all 0.3s ease"
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(161,193,216,0.5)";
+                    e.currentTarget.style.background = "rgba(161,193,216,0.1)";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(161,193,216,0.2)";
+                    e.currentTarget.style.background = "rgba(161,193,216,0.05)";
+                  }}
+                />
+                <div style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#a1c1d8", pointerEvents: "none", display: "flex", alignItems: "center" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Categories as Tabs */}
+              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
               {["ALL", ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))].map(cat => {
                 const isSelected = selectedCategory === cat;
                 return (
@@ -307,6 +346,7 @@ export default function Catalog() {
                   </button>
                 );
               })}
+              </div>
             </div>
 
             {/* Sort Dropdown Container */}
@@ -368,6 +408,15 @@ export default function Catalog() {
           }}>
             {(() => {
               let filteredProducts = products;
+              
+              if (searchQuery.trim() !== "") {
+                const q = searchQuery.toLowerCase().trim();
+                filteredProducts = filteredProducts.filter(p => 
+                  p.code?.toLowerCase().includes(q) || 
+                  p.category?.toLowerCase().includes(q)
+                );
+              }
+              
               if (selectedCategory !== "ALL") {
                 filteredProducts = filteredProducts.filter(p => p.category === selectedCategory);
               }
