@@ -17,6 +17,7 @@ import AdminPage from "./pages/AdminPage";
 import Admin from "./pages/Admin";
 import AdminProducts from "./pages/AdminProducts";
 import Catalog from "./pages/Catalog";
+import CatalogBuilderPage from "./pages/CatalogBuilderPage";
 
 function Router() {
   return (
@@ -27,6 +28,7 @@ function Router() {
       <Route path={"/admin/settings"} component={Admin} />
       <Route path={"/admin/products"} component={AdminProducts} />
       <Route path={"/catalogo"} component={Catalog} />
+      <Route path={"/catalog-builder"} component={CatalogBuilderPage} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
