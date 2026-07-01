@@ -185,7 +185,7 @@ export default function CatalogBuilderPage() {
               />
             </label>
             <label style={styles.label}>
-              Precio mayoreo
+              Precio
               <input
                 style={styles.input}
                 value={draft.price}
@@ -266,7 +266,7 @@ export default function CatalogBuilderPage() {
                     <h3 style={styles.cardName}>{p.name}</h3>
                     <p style={styles.cardCode}>{p.styleCode} {p.category ? `· ${p.category}` : ""}</p>
                     <div style={styles.cardDivider} />
-                    <p style={styles.cardDetail}><span style={styles.cardLabel}>Precio mayoreo:</span> {p.price}</p>
+                    <p style={styles.cardDetail}><span style={styles.cardLabel}>Precio:</span> {p.price}</p>
                     <p style={styles.cardDetail}><span style={styles.cardLabel}>Tallas:</span> {p.sizes}</p>
                     <p style={styles.cardDetail}><span style={styles.cardLabel}>Mínimo:</span> {p.minQty}</p>
                   </div>
