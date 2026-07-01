@@ -436,7 +436,12 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     flexDirection: "column",
   },
-  cardImage: { width: "100%", height: 160, objectFit: "cover" },
+  cardImage: { 
+    width: "100%", 
+    aspectRatio: "1 / 1", 
+    objectFit: "contain", 
+    background: COLORS.white 
+  },
   cardBody: { padding: 14, flex: 1, display: "flex", flexDirection: "column" },
   cardName: { fontFamily: FONT_SERIF, fontSize: 16, margin: "0 0 2px", color: COLORS.navy },
   cardCode: { fontSize: 10, letterSpacing: 1, color: "#888", margin: "0 0 8px", textTransform: "uppercase" },
