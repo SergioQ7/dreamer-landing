@@ -61,7 +61,7 @@ const COLLECTIONS = [
     name: "Signature Tailoring",
     tagline: "Denim innovation for clients seeking unique and distinctive pieces.",
     pieces: "45 Styles",
-    img: "https://vpjagklivtoyocmzyjhp.supabase.co/storage/v1/object/sign/collections/structured-elegance.PNG?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xN2U5ODMxZi0yYzZiLTRlOGUtYWNlZi05NzBmZGVmMDU2ZjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjb2xsZWN0aW9ucy9zdHJ1Y3R1cmVkLWVsZWdhbmNlLlBORyIsImlhdCI6MTc3NzQwODc5NCwiZXhwIjoxODA4OTQ0Nzk0fQ.dXoe-18MWLml-B1ayHBAI7AT4i6odJDxAZSfGGIsnew",
+    img: "https://nuohigjaddaipyebbiez.supabase.co/storage/v1/object/sign/collections/structured-elegance.PNG?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83NzBmNzZkMy0wNTMyLTQ2M2QtYWY4OS01N2RlODlmMjBjYjciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjb2xsZWN0aW9ucy9zdHJ1Y3R1cmVkLWVsZWdhbmNlLlBORyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODQ0MTIxMDMsImV4cCI6MTgxNTk0ODEwM30.cl94CAhk1544MWhHOzuWd0l6oomhgtLKITq8YfA_IWc",
     tag: "NEW ARRIVAL",
   },
   {
@@ -69,7 +69,7 @@ const COLLECTIONS = [
     name: "Elegant Comfort",
     tagline: "Lightweight premium fabrics, ideal for seasonal transitions.",
     pieces: "38 Styles",
-    img: "https://vpjagklivtoyocmzyjhp.supabase.co/storage/v1/object/sign/collections/architectural-simplicity.PNG?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xN2U5ODMxZi0yYzZiLTRlOGUtYWNlZi05NzBmZGVmMDU2ZjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjb2xsZWN0aW9ucy9hcmNoaXRlY3R1cmFsLXNpbXBsaWNpdHkuUE5HIiwiaWF0IjoxNzc3NDA4NzgyLCJleHAiOjE3ODAwMDA3ODJ9.ryo5RR2i5Jn7Muwh6nqeqckKEi0oEd2Ni_tSsSM8ip8",
+    img: "https://nuohigjaddaipyebbiez.supabase.co/storage/v1/object/sign/collections/architectural-simplicity.PNG?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83NzBmNzZkMy0wNTMyLTQ2M2QtYWY4OS01N2RlODlmMjBjYjciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjb2xsZWN0aW9ucy9hcmNoaXRlY3R1cmFsLXNpbXBsaWNpdHkuUE5HIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NDQxMjEwNCwiZXhwIjoxODE1OTQ4MTA0fQ.ZfbJ8kpCPZCW5m8yct7awIR7YYZe_2IMVxTLoOxDHNM",
     tag: "CRUISE COLLECTION",
   },
   {
@@ -77,7 +77,7 @@ const COLLECTIONS = [
     name: "Monochromatic Chic",
     tagline: "Effortless sophistication in pastel tones dominating the trends.",
     pieces: "32 Styles",
-    img: "https://vpjagklivtoyocmzyjhp.supabase.co/storage/v1/object/sign/collections/striped-minimalism.PNG?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xN2U5ODMxZi0yYzZiLTRlOGUtYWNlZi05NzBmZGVmMDU2ZjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjb2xsZWN0aW9ucy9zdHJpcGVkLW1pbmltYWxpc20uUE5HIiwiaWF0IjoxNzc3NDA4NzY2LCJleHAiOjE3ODAwMDA3NjZ9.EWaTU0D1UKHy4P6dZxHuufPpmc3jlLlbkntMzEFVCJY",
+    img: "https://nuohigjaddaipyebbiez.supabase.co/storage/v1/object/sign/collections/striped-minimalism.PNG?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83NzBmNzZkMy0wNTMyLTQ2M2QtYWY4OS01N2RlODlmMjBjYjciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjb2xsZWN0aW9ucy9zdHJpcGVkLW1pbmltYWxpc20uUE5HIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NDQxMjEwNCwiZXhwIjoxODE1OTQ4MTA0fQ.1_bu0LD6QTfPE0CZ5io7BKzRuI-TFmfsmvESdBvvf4s",
     tag: "NEW COLLECTION",
   },
 ];
